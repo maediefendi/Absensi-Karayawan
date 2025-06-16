@@ -1,0 +1,136 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+h1, h2 {
+  color: #343a40;
+  text-align: center;
+  font-weight: bold;
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+}
+
+#loginSection, #appSection {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+button {
+  min-width: 120px;
+}
+
+#loginStatus {
+  font-weight: bold;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+#appSection {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  #appSection {
+    max-width: 100%;
+  }
+}
+
+.table td, .table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+@media (max-width: 576px) {
+  #loginSection, #appSection {
+    padding: 1rem;
+  }
+  button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .btn + .btn {
+    margin-left: 0;
+  }
+}
+
+form .form-label {
+  font-weight: 500;
+}
+
+form input {
+  border-radius: 6px;
+}
+
+form button[type="submit"] {
+  margin-top: 1rem;
+}
+
+body {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+#loginSection {
+  animation: fadeIn 1s ease-in-out;
+}
+
+#loginSection h2 {
+  font-weight: bold;
+  color: #333;
+}
+
+.btn-primary {
+  background-color: #2575fc;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #1a5edb;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input.form-control, select.form-select {
+  border-radius: 8px;
+}
+
+#appSection h1 {
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+footer {
+  font-size: 16px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent !important; /* Hindari background hitam */
+  padding: 2rem 1rem;
+  border-top: none;
+  box-shadow: none;
+}
+
+
