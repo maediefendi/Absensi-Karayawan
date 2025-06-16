@@ -133,4 +133,132 @@ footer {
   box-shadow: none;
 }
 
+/* Animasi ringan */
+#appSection {
+  transition: all 0.3s ease;
+}
+
+#appSection .form-label {
+  font-weight: 500;
+}
+
+/* Tombol absensi */
+#appSection .btn-success,
+#appSection .btn-secondary {
+  font-size: 1rem;
+  padding: 12px 0;
+  border-radius: 10px;
+}
+
+#appSection .btn-outline-danger {
+  font-size: 0.9rem;
+}
+
+/* Header tabel */
+#tabelAbsensi thead th {
+  background: linear-gradient(to right, #0d6efd, #0dcaf0);
+  color: white;
+}
+
+/* Baris tabel */
+#tabelAbsensi tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Card filter */
+#filterSection {
+  background-color: #f0f8ff;
+  border-left: 4px solid #0d6efd;
+  border-radius: 12px;
+}
+
+/* Label ikon kecil */
+select option,
+#keterangan option,
+#posisi option {
+  padding-left: 10px;
+}
+
+#tabelAbsensi {
+  width: auto;
+  border-radius: 12px;
+}
+
+#tabelAbsensi th,
+#tabelAbsensi td {
+  white-space: nowrap;
+  padding: 8px 12px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.table-responsive {
+  padding: 1rem;
+  max-width: 95%;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: white;
+}
+.table-responsive {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+#tabelAbsensi {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  table-layout: auto;
+}
+
+#tabelAbsensi th,
+#tabelAbsensi td {
+  white-space: nowrap;
+  padding: 10px;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Lebar proporsional untuk tiap kolom */
+#tabelAbsensi th:nth-child(1), td:nth-child(1) { width: 5%; }
+#tabelAbsensi th:nth-child(2), td:nth-child(2) { width: 15%; }
+#tabelAbsensi th:nth-child(3), td:nth-child(3) { width: 10%; }
+#tabelAbsensi th:nth-child(4), td:nth-child(4),
+#tabelAbsensi th:nth-child(5), td:nth-child(5) { width: 10%; }
+#tabelAbsensi th:nth-child(6), td:nth-child(6) { width: 10%; }
+#tabelAbsensi th:nth-child(7), td:nth-child(7) { width: 15%; }
+#tabelAbsensi th:nth-child(8), td:nth-child(8) { width: 10%; }
+#tabelAbsensi th:nth-child(9), td:nth-child(9) { width: 15%; }
+
+.table-responsive {
+  max-width: 95%;         /* Membuat tabel lebih lebar di layar */
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 16px;
+  overflow-x: auto;        /* Scroll horizontal jika terlalu lebar */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#tabelAbsensi {
+  width: 100%;             /* Full lebar dalam .table-responsive */
+  min-width: 1000px;       /* Tabel tetap besar walau isi sedikit */
+  border-radius: 16px;
+  table-layout: auto;
+  overflow: hidden;
+}
+
+#tabelAbsensi th,
+#tabelAbsensi td {
+  white-space: nowrap;
+  padding: 12px 16px;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+}
 

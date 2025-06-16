@@ -12,8 +12,9 @@ function login() {
 
     document.getElementById("loginSection").classList.add("d-none");
     document.getElementById("appSection").classList.remove("d-none");
-    document.getElementById("nama").value = user.nama;
-    document.getElementById("nama").readOnly = false;
+    document.getElementById("nama").value = "";
+document.getElementById("nama").readOnly = false;
+
 
     if (user.role === "admin") {
       window.location.href = "dashboard.html";

@@ -1,89 +1,56 @@
-// js/data.js
+// ================================
+// Inisialisasi Data Awal
+// ================================
+if (!localStorage.getItem("pengguna")) {
+  localStorage.setItem("pengguna", JSON.stringify([
+    { username: "admin", password: "admin123", nama: "Admin", role: "admin" },
+    { username: "karyawan1", password: "123", nama: "Budi Santoso", role: "karyawan" },
+    { username: "karyawan2", password: "456", nama: "Siti Aisyah", role: "karyawan" }
+  ]));
+}
 
+// ================================
+// Fungsi User
+// ================================
+function ambilPengguna() {
+  return JSON.parse(localStorage.getItem("pengguna")) || [];
+}
+
+function setUserLogin(user) {
+  localStorage.setItem("loginUser", JSON.stringify(user));
+}
+
+function getUserLogin() {
+  return JSON.parse(localStorage.getItem("loginUser"));
+}
+
+function logoutUser() {
+  localStorage.removeItem("loginUser");
+}
+
+// ================================
+// Fungsi Absensi
+// ================================
 function ambilAbsensi() {
   return JSON.parse(localStorage.getItem("absensi")) || [];
 }
 
 function simpanAbsensi(data) {
-  let absensi = ambilAbsensi();
-  const index = absensi.findIndex(a => a.nama === data.nama && a.tanggal === data.tanggal);
-  if (index !== -1) {
-    absensi[index] = data;
-  } else {
-    absensi.push(data);
-  }
-  localStorage.setItem("absensi", JSON.stringify(absensi));
-}
-
-function ambilPengguna() {
-  return [
-    { username: "admin", password: "admin123", nama: "Admin", role: "admin" },
-    { username: "karyawan1", password: "123", nama: "Karyawan 1", role: "karyawan" },
-    { username: "karyawan2", password: "456", nama: "Karyawan 2", role: "karyawan" },
-  ];
-}
-
-function setUserLogin(user) {
-  localStorage.setItem("userLogin", JSON.stringify(user));
-}
-
-function getUserLogin() {
-  return JSON.parse(localStorage.getItem("userLogin"));
-}
-
-function logoutUser() {
-  localStorage.removeItem("userLogin");
-}
-
-function ambilAbsensi() {
-  return JSON.parse(localStorage.getItem("absensi") || "[]");
-}
-
-function simpanAbsensi(data) {
   const semua = ambilAbsensi();
   const index = semua.findIndex(a => a.nama === data.nama && a.tanggal === data.tanggal);
+
   if (index !== -1) {
-    semua[index] = data;
+    semua[index] = data; // update jika sudah ada
   } else {
-    semua.push(data);
+    semua.push(data); // tambah baru
   }
+
   localStorage.setItem("absensi", JSON.stringify(semua));
 }
 
-function ambilPengguna() {
-  return JSON.parse(localStorage.getItem("pengguna") || "[]");
-}
-
-function setUserLogin(user) {
-  localStorage.setItem("login", JSON.stringify(user));
-}
-
-// js/data.js
-
-// Inisialisasi data user jika belum ada
-if (!localStorage.getItem("pengguna")) {
-  localStorage.setItem("pengguna", JSON.stringify([
-    { username: "admin", password: "admin123", nama: "Admin", role: "admin" },
-    { username: "karyawan", password: "karyawan123", nama: "Karyawan 1", role: "karyawan" }
-  ]));
-}
-
-// Fungsi ambil pengguna
-function ambilPengguna() {
-  return JSON.parse(localStorage.getItem("pengguna")) || [];
-}
-
-// Fungsi set user login (jika diperlukan di masa depan)
-function setUserLogin(user) {
-  localStorage.setItem("loginUser", JSON.stringify(user));
-}
-
-// Fungsi logout (opsional)
-function logoutUser() {
-  localStorage.removeItem("loginUser");
-}
-
-// Hitung rekap per karyawan
+// ================================
+// Fungsi Rekap
+// ================================
 function hitungRekapPerKaryawan(data) {
   const rekap = {};
 
@@ -98,31 +65,24 @@ function hitungRekapPerKaryawan(data) {
       };
     }
 
-    rekap[item.nama].total++;
+    const r = rekap[item.nama];
+    r.total++;
 
-    switch (item.status) {
-      case "Tepat Waktu":
-        rekap[item.nama].tepat++;
-        break;
-      case "Terlambat":
-        rekap[item.nama].telat++;
-        break;
-      case "Pulang Cepat":
-        rekap[item.nama].cepat++;
-        break;
-      case "Terlambat & Pulang Cepat":
-        rekap[item.nama].telatCepat++;
-        break;
-    }
+    if (item.status === "Tepat Waktu") r.tepat++;
+    else if (item.status === "Terlambat") r.telat++;
+    else if (item.status === "Pulang Cepat") r.cepat++;
+    else if (item.status === "Terlambat & Pulang Cepat") r.telatCepat++;
   });
 
   return rekap;
 }
 
-// Tampilkan rekap ke dalam tabel
 function tampilkanRekap(data) {
   const rekap = hitungRekapPerKaryawan(data);
   const tbody = document.getElementById("rekapPerKaryawan");
+
+  if (!tbody) return;
+
   tbody.innerHTML = "";
 
   Object.entries(rekap).forEach(([nama, r]) => {
@@ -138,6 +98,3 @@ function tampilkanRekap(data) {
     tbody.appendChild(tr);
   });
 }
-
-// Panggil tampilkan rekap
-tampilkanRekap(absensi);

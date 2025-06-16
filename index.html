@@ -1,115 +1,147 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Absensi Karyawan</title>
+  <title>Sistem Absensi Karyawan</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+  <!-- AOS Animation -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 
 <body class="bg-light">
   <div class="container-fluid mt-5">
+
     <!-- LOGIN -->
-    <div id="loginSection" class="card p-4 shadow mx-auto" style="max-width: 500px;">
-  <div class="text-center mb-4">
-    <img src="asset/preview.jpg" alt="Logo Perusahaan" style="height: 150px;">
-    <h2 class="mt-3">Selamat Datang</h2>
-    <p class="text-muted">Silakan login untuk melanjutkan</p>
+    <div id="loginSection" class="card p-4 shadow mx-auto" style="max-width: 500px;" data-aos="fade-up">
+      <div class="text-center mb-4">
+        <img src="asset/preview.jpg" alt="Logo Perusahaan" style="height: 150px;">
+        <h2 class="mt-3 fw-bold">Selamat Datang</h2>
+        <p class="text-muted">Silakan login menggunakan akun Anda untuk memulai absensi.</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Masukkan username Anda">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Masukkan password Anda">
+      </div>
+      <button class="btn btn-primary w-100" onclick="login()">Login</button>
+      <p id="loginStatus" class="text-danger mt-3 text-center"></p>
+    </div>
+
+    <!-- TAMBAH USER -->
+    <div id="tambahUserSection" class="mt-4" style="display: none;" data-aos="fade-up">
+      <h5 class="text-center">Tambah Pengguna Baru</h5>
+      <input type="text" id="newUsername" class="form-control mb-2" placeholder="Username baru">
+      <input type="text" id="newNama" class="form-control mb-2" placeholder="Nama lengkap">
+      <input type="password" id="newPassword" class="form-control mb-2" placeholder="Password baru">
+      <select id="newRole" class="form-select mb-3">
+        <option value="karyawan">Karyawan</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button class="btn btn-success w-100" onclick="tambahUser()">Tambah User</button>
+      <p id="tambahStatus" class="text-success mt-2 text-center"></p>
+    </div>
+
+ <div id="appSection" class="card p-4 shadow-lg rounded-4 bg-white d-none" data-aos="fade-up">
+  <div class="mb-4 text-center">
+    <h2 class="fw-bold text-primary"><i class="bi bi-clipboard-check"></i> Absensi Karyawan</h2>
+    <p class="text-muted mb-0" id="jamSekarang"></p>
   </div>
+
+  <!-- Data Karyawan -->
   <div class="mb-3">
-    <label class="form-label">Username</label>
-    <input type="text" id="username" class="form-control" placeholder="Masukkan username">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Password</label>
-    <input type="password" id="password" class="form-control" placeholder="Masukkan password">
-  </div>
-  <button class="btn btn-primary w-100" onclick="login()">Login</button>
-  <p id="loginStatus" class="text-danger mt-3 text-center"></p>
-</div>
-
-
-    <!-- FORM TAMBAH USER -->
-<div id="tambahUserSection" class="mt-4" style="display: none;">
-  <h5 class="text-center">Tambah Pengguna</h5>
-  <div class="mb-2">
-    <input type="text" id="newUsername" class="form-control" placeholder="Username baru">
-  </div>
-  <div class="mb-2">
-    <input type="text" id="newNama" class="form-control" placeholder="Nama lengkap">
-  </div>
-  <div class="mb-2">
-    <input type="password" id="newPassword" class="form-control" placeholder="Password baru">
-  </div>
-  <div class="mb-3">
-    <select id="newRole" class="form-select">
-      <option value="karyawan">Karyawan</option>
-      <option value="admin">Admin</option>
-    </select>
-  </div>
-  <button class="btn btn-success w-100" onclick="tambahUser()">Tambah User</button>
-  <p id="tambahStatus" class="text-success mt-2 text-center"></p>
-</div>
-
-
-    <!-- APP -->
-   <!-- Setelah #loginSection -->
-<div id="appSection" class="card p-4 shadow d-none">
-  <h3 class="mb-4 text-center">Form Absensi</h3>
-
-  <div class="mb-3">
-    <label class="form-label">Nama</label>
+    <label class="form-label"><i class="bi bi-person-badge"></i> Nama Karyawan</label>
     <input type="text" id="nama" class="form-control" readonly />
   </div>
 
-  <div class="d-flex justify-content-between mb-3">
-    <button class="btn btn-success w-100 me-2" onclick="absen('masuk')">Absen Masuk</button>
-    <button class="btn btn-secondary w-100 ms-2" onclick="absen('pulang')">Absen Pulang</button>
+  <!-- Lokasi dan Keterangan -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label class="form-label"><i class="bi bi-geo-alt-fill"></i> Lokasi</label>
+      <select id="posisi" class="form-select">
+        <option value="">Pilih Lokasi</option>
+        <option value="On Office">On Office</option>
+        <option value="On Home">On Home</option>
+        <option value="On Road">On Road</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label"><i class="bi bi-check2-circle"></i> Keterangan</label>
+      <select id="keterangan" class="form-select">
+        <option value="">Pilih Keterangan</option>
+        <option value="Hadir">Hadir</option>
+        <option value="Sakit">Sakit</option>
+        <option value="Izin">Izin</option>
+      </select>
+    </div>
   </div>
 
-  <div class="text-end">
-    <button class="btn btn-outline-danger" onclick="logoutUser()">Logout</button>
+  <!-- Tombol Absensi -->
+  <div class="row mb-4">
+    <div class="col-md-6 d-grid">
+      <button class="btn btn-success fw-semibold" onclick="absen('masuk')"><i class="bi bi-box-arrow-in-right"></i> Absen Masuk</button>
+    </div>
+    <div class="col-md-6 d-grid">
+      <button class="btn btn-secondary fw-semibold" onclick="absen('pulang')"><i class="bi bi-box-arrow-left"></i> Absen Pulang</button>
+    </div>
   </div>
 
-  <hr />
-  <!-- Posisi -->
-   <label class="form-label">Posisi</label>
-<select id="posisi" class="form-select mb-2">
-  <option value="On Office">-</option>
-  <option value="On Office">On Office</option>
-  <option value="On Home">On Home</option>
-  <option value="On Road">On Road</option>
-</select>
+  <div class="text-end mb-3">
+    <button class="btn btn-outline-danger btn-sm" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+  </div>
 
-<!-- Keterangan -->
- <label class="form-label">Posisi</label>
-<select id="keterangan" class="form-select mb-3">
-  <option value="Hadir">-</option>
-  <option value="Hadir">Hadir</option>
-  <option value="Sakit">Sakit</option>
-  <option value="Izin">Izin</option>
-</select>
+  <!-- FILTER SECTION -->
+  <div id="filterSection" class="card p-3 shadow-sm mb-4 d-none border-0">
+    <h5 class="mb-3 fw-semibold"><i class="bi bi-funnel-fill"></i> Filter Data Absensi</h5>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Tanggal</label>
+        <input type="date" id="filterTanggal" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Lokasi</label>
+        <select id="filterPosisi" class="form-select">
+          <option value="">Semua</option>
+          <option value="On Office">On Office</option>
+          <option value="On Home">On Home</option>
+          <option value="On Road">On Road</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Keterangan</label>
+        <select id="filterKeterangan" class="form-select">
+          <option value="">Semua</option>
+          <option value="Hadir">Hadir</option>
+          <option value="Sakit">Sakit</option>
+          <option value="Izin">Izin</option>
+        </select>
+      </div>
+    </div>
+    <div class="text-end mt-3">
+      <button class="btn btn-outline-primary btn-sm" onclick="filterTabel()"><i class="bi bi-search"></i> Terapkan</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="resetFilter()"><i class="bi bi-x-circle"></i> Reset</button>
+    </div>
+  </div>
 
-
-  <div class="table-responsive mt-3">
-    <table id="tabelAbsensi" class="table table-bordered table-striped d-none">
-      <thead class="table-dark text-center">
+  <!-- TABEL ABSENSI -->
+  <div class="table-responsive">
+    <table id="tabelAbsensi" class="table table-hover table-bordered d-none">
+      <thead class="text-center">
         <tr>
           <th>No</th>
           <th>Nama</th>
           <th>Tanggal</th>
           <th>Jam Masuk</th>
           <th>Jam Pulang</th>
-          <th>Durasi Kerja</th>
+          <th>Durasi</th>
           <th>Status</th>
-          <th>Posisi</th>
+          <th>Lokasi</th>
           <th>Keterangan</th>
         </tr>
       </thead>
@@ -118,142 +150,33 @@
   </div>
 
   <div class="text-end mt-3">
-    <button id="exportBtn" class="btn btn-primary d-none" onclick="exportToExcel()">Export ke Excel</button>
+    <button id="exportBtn" class="btn btn-primary d-none" onclick="exportToExcel()"><i class="bi bi-file-earmark-excel"></i> Export ke Excel</button>
   </div>
 </div>
 
 
+  <footer class="text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-1">&copy; 2025 Sistem Absensi. All rights reserved.</p>
+      <p class="mb-0">Crafted with by <strong>Maedi</strong></p>
+    </div>
+  </footer>
 
+  <!-- SCRIPT -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>AOS.init();</script>
 
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
-    const users = {
-      "admin": { password: "admin123", role: "admin" },
-      "karyawan": { password: "karyawan123", role: "karyawan" }
-    };
-
-    let currentRole = "";
-    let jamMasukSementara = {};
-    let no = 1;
-
-    function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      if (users[user] && users[user].password === pass) {
-        currentRole = users[user].role;
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('appSection').style.display = 'block';
-
-        if (currentRole === "admin") {
-          document.getElementById('tabelAbsensi').style.display = 'table';
-          document.getElementById('exportBtn').style.display = 'inline-block';
-        }
-      } else {
-        document.getElementById('loginStatus').innerText = 'Username atau password salah';
-      }
-    }
-
-    function absen(tipe) {
-      const nama = document.getElementById('nama').value;
-      if (!nama) {
-        alert("Nama wajib diisi!");
-        return;
-      }
-
+    setInterval(() => {
       const now = new Date();
-      const jam = now.toTimeString().substring(0, 5);
-      const tanggal = now.toISOString().split('T')[0];
+      document.getElementById("jamSekarang").innerText = "Waktu sekarang: " + now.toLocaleTimeString('id-ID');
+    }, 1000);
+  </script>
 
-      if (tipe === 'masuk') {
-        jamMasukSementara[nama] = { tanggal, jamMasuk: jam };
-        tampilkanBarisSementara(nama, tanggal, jam);
-        alert(`Absen masuk dicatat pada ${jam}`);
-      } else if (tipe === 'pulang') {
-        if (!jamMasukSementara[nama]) {
-          alert("Anda belum absen masuk!");
-          return;
-        }
-
-        const jamMasuk = jamMasukSementara[nama].jamMasuk;
-        const durasi = hitungDurasi(jamMasuk, jam);
-        const status = cekStatus(jamMasuk, jam);
-
-        if (currentRole === "admin") {
-          const tabel = document.getElementById('tabelAbsensi').getElementsByTagName('tbody')[0];
-          const baris = [...tabel.rows].find(r => r.cells[1].innerText === nama && r.cells[4].innerText === "");
-          if (baris) {
-            baris.cells[4].innerText = jam;
-            baris.cells[5].innerText = durasi;
-            baris.cells[6].innerText = status;
-          }
-        }
-
-        delete jamMasukSementara[nama];
-        alert("Absensi berhasil dicatat!");
-        document.getElementById('absenForm').reset();
-      }
-    }
-
-    function tampilkanBarisSementara(nama, tanggal, jamMasuk) {
-      if (currentRole === "admin") {
-        const tabel = document.getElementById('tabelAbsensi');
-        const tbody = tabel.getElementsByTagName('tbody')[0];
-        const baris = tbody.insertRow();
-        baris.innerHTML = `
-          <td>${no++}</td>
-          <td>${nama}</td>
-          <td>${tanggal}</td>
-          <td>${jamMasuk}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        `;
-        tabel.style.display = 'table';
-      }
-    }
-
-    function hitungDurasi(masuk, pulang) {
-      const [jamM, menitM] = masuk.split(":").map(Number);
-      const [jamP, menitP] = pulang.split(":").map(Number);
-      let totalMenit = (jamP * 60 + menitP) - (jamM * 60 + menitM);
-      const jam = Math.floor(totalMenit / 60);
-      const menit = totalMenit % 60;
-      return `${jam} jam, ${menit} menit`;
-    }
-
-    function cekStatus(masuk, pulang) {
-      const jamMasukNormal = "07:30";
-      const jamPulangNormal = "17:00";
-      let status = [];
-      if (masuk > jamMasukNormal) status.push("Terlambat");
-      if (pulang < jamPulangNormal) status.push("Pulang Cepat");
-      return status.length ? status.join(", ") : "Tepat Waktu";
-    }
-
-    function exportToExcel() {
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.table_to_sheet(document.getElementById('tabelAbsensi'));
-      XLSX.utils.book_append_sheet(wb, ws, "Absensi");
-      XLSX.writeFile(wb, "absensi_karyawan.xlsx");
-    }
-  </script> -->
   <script src="js/data.js"></script>
-<script src="js/app.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-
-<footer class="text-white text-center py-4 mt-5" style="background: transparent;">
-
-  <div class="container">
-    <p class="mb-1">&copy; 2025 MyWebsite. All rights reserved.</p>
-    <p class="mb-0">Crafted with by <strong>Maedi</strong></p>
-  </div>
-</footer>
-
-
-
-
+  <script src="js/app.js"></script>
 </body>
-
 </html>
