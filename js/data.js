@@ -82,3 +82,62 @@ function setUserLogin(user) {
 function logoutUser() {
   localStorage.removeItem("loginUser");
 }
+
+// Hitung rekap per karyawan
+function hitungRekapPerKaryawan(data) {
+  const rekap = {};
+
+  data.forEach(item => {
+    if (!rekap[item.nama]) {
+      rekap[item.nama] = {
+        tepat: 0,
+        telat: 0,
+        cepat: 0,
+        telatCepat: 0,
+        total: 0
+      };
+    }
+
+    rekap[item.nama].total++;
+
+    switch (item.status) {
+      case "Tepat Waktu":
+        rekap[item.nama].tepat++;
+        break;
+      case "Terlambat":
+        rekap[item.nama].telat++;
+        break;
+      case "Pulang Cepat":
+        rekap[item.nama].cepat++;
+        break;
+      case "Terlambat & Pulang Cepat":
+        rekap[item.nama].telatCepat++;
+        break;
+    }
+  });
+
+  return rekap;
+}
+
+// Tampilkan rekap ke dalam tabel
+function tampilkanRekap(data) {
+  const rekap = hitungRekapPerKaryawan(data);
+  const tbody = document.getElementById("rekapPerKaryawan");
+  tbody.innerHTML = "";
+
+  Object.entries(rekap).forEach(([nama, r]) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${nama}</td>
+      <td class="text-center">${r.tepat}</td>
+      <td class="text-center">${r.telat}</td>
+      <td class="text-center">${r.cepat}</td>
+      <td class="text-center">${r.telatCepat}</td>
+      <td class="text-center">${r.total}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Panggil tampilkan rekap
+tampilkanRekap(absensi);

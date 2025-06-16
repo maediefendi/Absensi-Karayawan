@@ -1,5 +1,3 @@
-// js/app.js
-
 function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -9,6 +7,9 @@ function login() {
 
   if (user) {
     setUserLogin(user);
+
+    cekResetHarian(); // Reset absensi jika hari baru
+
     document.getElementById("loginSection").classList.add("d-none");
     document.getElementById("appSection").classList.remove("d-none");
     document.getElementById("nama").value = user.nama;
@@ -26,6 +27,8 @@ function login() {
 
 function absen(jenis) {
   const nama = document.getElementById("nama").value;
+  const posisi = document.getElementById("posisi")?.value || "-";
+  const keterangan = document.getElementById("keterangan")?.value || "-";
   const sekarang = new Date();
   const tanggal = sekarang.toLocaleDateString('id-ID');
   const jam = sekarang.toLocaleTimeString('id-ID', {
@@ -36,8 +39,18 @@ function absen(jenis) {
 
   let absen = ambilAbsensi();
   let data = absen.find(a => a.nama === nama && a.tanggal === tanggal) || {
-    nama, tanggal, jamMasuk: "", jamPulang: "", status: "", durasi: ""
+    nama,
+    tanggal,
+    jamMasuk: "",
+    jamPulang: "",
+    status: "",
+    durasi: "",
+    posisi: posisi,
+    keterangan: keterangan
   };
+
+  data.posisi = posisi;
+  data.keterangan = keterangan;
 
   if (jenis === 'masuk' && !data.jamMasuk) {
     data.jamMasuk = jam;
@@ -92,6 +105,8 @@ function tampilkanData() {
       <td>${d.jamPulang || "-"}</td>
       <td>${d.durasi || "-"}</td>
       <td>${d.status || "-"}</td>
+      <td>${d.posisi || "-"}</td>
+      <td>${d.keterangan || "-"}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -102,9 +117,9 @@ function tampilkanData() {
 
 function exportToExcel() {
   const data = ambilAbsensi();
-  let csv = "No,Nama,Tanggal,Jam Masuk,Jam Pulang,Durasi,Status\n";
+  let csv = "No,Nama,Tanggal,Jam Masuk,Jam Pulang,Durasi,Status,Posisi,Keterangan\n";
   data.forEach((d, i) => {
-    csv += `${i + 1},${d.nama},${d.tanggal},${d.jamMasuk},${d.jamPulang},${d.durasi},${d.status}\n`;
+    csv += `${i + 1},${d.nama},${d.tanggal},${d.jamMasuk || "-"},${d.jamPulang || "-"},${d.durasi || "-"},${d.status || "-"},${d.posisi || "-"},${d.keterangan || "-"}\n`;
   });
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
@@ -117,4 +132,14 @@ function exportToExcel() {
 function logoutUser() {
   localStorage.removeItem("userLogin");
   window.location.href = "index.html";
+}
+
+function cekResetHarian() {
+  const hariIni = new Date().toLocaleDateString('id-ID');
+  const tanggalTerakhir = localStorage.getItem("tanggalTerakhir");
+
+  if (tanggalTerakhir !== hariIni) {
+    localStorage.setItem("absensi", JSON.stringify([]));
+    localStorage.setItem("tanggalTerakhir", hariIni);
+  }
 }

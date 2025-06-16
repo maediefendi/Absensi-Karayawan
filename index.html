@@ -79,6 +79,24 @@
   </div>
 
   <hr />
+  <!-- Posisi -->
+   <label class="form-label">Posisi</label>
+<select id="posisi" class="form-select mb-2">
+  <option value="On Office">-</option>
+  <option value="On Office">On Office</option>
+  <option value="On Home">On Home</option>
+  <option value="On Road">On Road</option>
+</select>
+
+<!-- Keterangan -->
+ <label class="form-label">Posisi</label>
+<select id="keterangan" class="form-select mb-3">
+  <option value="Hadir">-</option>
+  <option value="Hadir">Hadir</option>
+  <option value="Sakit">Sakit</option>
+  <option value="Izin">Izin</option>
+</select>
+
 
   <div class="table-responsive mt-3">
     <table id="tabelAbsensi" class="table table-bordered table-striped d-none">
@@ -91,6 +109,8 @@
           <th>Jam Pulang</th>
           <th>Durasi Kerja</th>
           <th>Status</th>
+          <th>Posisi</th>
+          <th>Keterangan</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -219,6 +239,9 @@
   </script> -->
   <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 
 <footer class="text-white text-center py-4 mt-5" style="background: transparent;">
 
